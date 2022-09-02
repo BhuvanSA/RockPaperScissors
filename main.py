@@ -1,72 +1,84 @@
 import random
 import os
-import time
 import sys
-ps,cs = 0,0
+
+def welcome():
+    os.system('clear')
+    print("Welcome to Rock Paper Scissors")
+    print("Can you win against the Computer?")
+    r = int(input('How many rounds do you want to play?\n'))
+    print("Okay")
+    return r
+
+def playerChoice():
+    pc = ''
+    while pc  not in choices:
+        pc = input('Rock Paper Scissors???\n').strip().lower()
+    print()
+    print('Player Choice    : ',pc)
+    return pc
+
+def computerChoice():
+    cc = random.choice(choices)
+    print('Computer Choice  : ',cc)
+    return cc
+
 def compare(pc,cc):
-    global ps,cs,turns
+    global ps,cs,i
+    print()
     if (pc == cc):
-        return 'Round Draw'
+        return 'Round Draw Repeat'
     elif ((pc == 'rock' and cc == 'paper') or (pc == 'paper' and cc == 'scissors') or (pc == 'scissors' and cc == 'rock')):
         cs+=1
-        turns+=1
-        return 'Computer wins'
+        i+=1
+        return 'Computer won the Round'
     else:
         ps+=1
-        turns+=1
-        return 'Player wins'
-def winCheck(rounds):
-    rem = turns-rounds
-    if  ps+rem > cs+rem:
-        return 'person' 
-    elif cs+rem > ps+rem:
-        return 'comp'
-    else:
-        return 'draw'
+        i+=1
+        return 'Player won the Round'
+
+def score():
+    print()
+    print('Player       : {:^10}'.format(ps))
+    print('Computer     : {:^10}'.format(cs))
+    print()
+
+def round():
+    print(i,': ',compare(playerChoice(),computerChoice()))
+    score()
+
+def brain():
+    global r,ps,cs,i
+    rem = r-i
+    if (ps > cs + rem):
+        return False
+    elif (cs > ps + rem):
+        return False
+    return True
+
+def whoWon():
+    global ps,cs
+    if (ps > cs):
+        return 'Player Won!!! Congratulations'
+    elif (cs > ps):
+        return 'Computer Won!!! Hehe'
 
 choices = ['rock','paper','scissors']
-os.system('clear')
-print('Rock Paper Scissors')
-print('Can you win against the computer??')
-turns = 0
+cs = ps =  0
+i = 1
+y = ''
 while True:
-    rounds = int(input('How many rounds do you want to play?').strip())
-    pc,cc = 0,0
-    while True:
-        cc = random.choice(choices)
-        print(rounds,'Rock ...',end=' ')
-        time.sleep(.25)
-        print('Paper ...',end=' ')
-        time.sleep(.25)
-        print('Scissors ...',end=' ')
-        time.sleep(.25)
-        print('Which one do you choose??')
-        time.sleep(.25)
-        while pc not in choices:
-            pc = input().strip().lower()
-        print('Computer :',cc)
-        print(compare(pc,cc))
-        pc = 0
-        print('Player Score    {:^10}'.format(ps))
-        print('Computer Score  {:^10}'.format(cs))
-        print(turns)
-        if (turns >= (rounds/2)+1):
-            res =  winCheck(rounds)
-            match res:
-                case 'player':
-                    print('player')
-                    break
-                case 'comp':
-                    print('computer')
-                    break
-                case 'draw':
-                    print('draw')
-                    break
-    ps,cs,pc,cs,turns = 0,0,0,0,0
-    c = input('Do you want to play again?')
-    os.system('clear')
-    if c == 'n':
+    r = welcome()
+    while brain():
+        round()
+    print(whoWon())
+    cs=ps=pc=cc=r=0
+    i = 1
+    y = input('Do you want to play again Y/N:\n').lower().strip()
+    if y == 'n':
         sys.exit(0)
+
+sys.exit(0)
 
 
 
